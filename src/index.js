@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import registerServiceWorker from './registerServiceWorker';
-import ComposeFormComponent from './components/ComposeForm/ComposeFormComponent';
-import MessagesComponent from './components/Messages/MessagesComponent';
-import ToolbarComponent from './components/Toolbar/ToolbarComponent';
-import InboxPageLayout from './components/InboxPageLayout/InboxPageLayout';
+// import ComposeFormComponent from './components/ComposeForm/ComposeFormComponent';
+// import MessagesComponent from './components/Messages/MessagesComponent';
+// import ToolbarComponent from './components/Toolbar/ToolbarComponent';
+// import InboxPageLayout from './components/InboxPageLayout/InboxPageLayout';
 import InboxPage from './components/InboxPage';
 
 let messages = [
