@@ -22,60 +22,60 @@ storiesOf('MessageComponent', module)
           "You can't input the protocol without calculating the mobile RSS protocol!",
         read: false,
         starred: false,
-        labels: ['dev', 'personal'],
-        selected: false
+        labels: []
       }}
+      selected={false}
     />
   )
   .add('Read UNStarred', () =>
     <MessageComponent
       message={{
-        id: 2,
+        id: 1,
         subject:
           "You can't input the protocol without calculating the mobile RSS protocol!",
         read: true,
         starred: false,
-        labels: ['dev', 'personal'],
-        selected: false
+        labels: []
       }}
+      selected={false}
     />
   )
   .add('Selected', () =>
     <MessageComponent
       message={{
-        id: 3,
+        id: 1,
         subject:
           "You can't input the protocol without calculating the mobile RSS protocol!",
         read: false,
         starred: false,
-        labels: ['dev', 'personal'],
-        selected: true
+        labels: []
       }}
+      selected={true}
     />
   )
   .add('Starred', () =>
     <MessageComponent
       message={{
-        id: 4,
+        id: 1,
         subject:
           "You can't input the protocol without calculating the mobile RSS protocol!",
         read: false,
         starred: true,
-        labels: ['dev', 'personal'],
-        selected: false
+        labels: []
       }}
+      selected={false}
     />
   )
   .add('With Labels', () =>
     <MessageComponent
       message={{
-        id: 5,
+        id: 1,
         subject:
           "You can't input the protocol without calculating the mobile RSS protocol!",
         read: false,
         starred: true,
-        labels: ['dev', 'personal'],
-        selected: false
+        labels: ['dev', 'personal']
       }}
+      selected={false}
     />
   );

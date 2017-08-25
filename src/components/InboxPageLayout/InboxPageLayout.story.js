@@ -1,12 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-// import registerServiceWorker from './registerServiceWorker';
-import ComposeFormComponent from './components/ComposeForm/ComposeFormComponent';
-import MessagesComponent from './components/Messages/MessagesComponent';
-import ToolbarComponent from './components/Toolbar/ToolbarComponent';
-import InboxPageLayout from './components/InboxPageLayout/InboxPageLayout';
-import InboxPage from './components/InboxPage';
+import { storiesOf } from '@storybook/react';
+import ComposeFormComponent from '../ComposeForm/ComposeFormComponent';
+import MessagesComponent from '../Messages/MessagesComponent';
+import ToolbarComponent from '../Toolbar/ToolbarComponent';
+import InboxPageLayout from '../InboxPageLayout/InboxPageLayout';
 
 let messages = [
   {
@@ -78,11 +75,29 @@ let selectedMessageIds = [1, 3, 5];
 
 let showComposeForm = true;
 
-ReactDOM.render(
-  <InboxPage
-    messages={messages}
-    selectedMessageIds={selectedMessageIds}
-    showComposeForm={showComposeForm}
-  />,
-  document.getElementById('root')
-);
+storiesOf('InboxPageLayout', module)
+  .add('compose form', () =>
+    <InboxPageLayout>
+      <ToolbarComponent
+        messages={messages}
+        selectedMessageCount={selectedMessageIds.length}
+      />
+      <MessagesComponent
+        messages={messages}
+        selectedMessageIds={selectedMessageIds}
+      />
+      {showComposeForm && <ComposeFormComponent />}
+    </InboxPageLayout>
+  )
+  .add('no form component', () =>
+    <InboxPageLayout>
+      <ToolbarComponent
+        messages={messages}
+        selectedMessageCount={selectedMessageIds.length}
+      />
+      <MessagesComponent
+        messages={messages}
+        selectedMessageIds={selectedMessageIds}
+      />
+    </InboxPageLayout>
+  );

@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-// import registerServiceWorker from './registerServiceWorker';
-import ComposeFormComponent from './components/ComposeForm/ComposeFormComponent';
-import MessagesComponent from './components/Messages/MessagesComponent';
-import ToolbarComponent from './components/Toolbar/ToolbarComponent';
-import InboxPageLayout from './components/InboxPageLayout/InboxPageLayout';
-import InboxPage from './components/InboxPage';
+import { storiesOf } from '@storybook/react';
+// import ComposeFormComponent from '../ComposeForm/ComposeFormComponent';
+// import MessagesComponent from '../Messages/MessagesComponent';
+// import ToolbarComponent from '../Toolbar/ToolbarComponent';
+// import InboxPageLayout from '../InboxPageLayout/InboxPageLayout';
+import InboxPage from './InboxPage';
 
 let messages = [
   {
@@ -78,11 +76,10 @@ let selectedMessageIds = [1, 3, 5];
 
 let showComposeForm = true;
 
-ReactDOM.render(
+storiesOf('InboxPage', module).add('Happy Path', () =>
   <InboxPage
     messages={messages}
     selectedMessageIds={selectedMessageIds}
     showComposeForm={showComposeForm}
-  />,
-  document.getElementById('root')
+  />
 );

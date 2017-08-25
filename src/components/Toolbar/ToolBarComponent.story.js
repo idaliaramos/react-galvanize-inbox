@@ -1,12 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-// import registerServiceWorker from './registerServiceWorker';
-import ComposeFormComponent from './components/ComposeForm/ComposeFormComponent';
-import MessagesComponent from './components/Messages/MessagesComponent';
-import ToolbarComponent from './components/Toolbar/ToolbarComponent';
-import InboxPageLayout from './components/InboxPageLayout/InboxPageLayout';
-import InboxPage from './components/InboxPage';
+import { storiesOf } from '@storybook/react';
+import ToolbarComponent from './ToolbarComponent';
 
 let messages = [
   {
@@ -39,7 +33,7 @@ let messages = [
     subject: 'We need to program the primary TCP hard drive!',
     read: true,
     starred: false,
-    selected: true,
+
     labels: []
   },
   {
@@ -74,15 +68,16 @@ let messages = [
   }
 ];
 
-let selectedMessageIds = [1, 3, 5];
-
-let showComposeForm = true;
-
-ReactDOM.render(
-  <InboxPage
-    messages={messages}
-    selectedMessageIds={selectedMessageIds}
-    showComposeForm={showComposeForm}
-  />,
-  document.getElementById('root')
-);
+storiesOf('ToolbarComponent', module)
+  .add('all messages selected', () =>
+    <ToolbarComponent
+      messages={messages}
+      selectedMessageCount={messages.length}
+    />
+  )
+  .add('some messages selected', () =>
+    <ToolbarComponent messages={messages} selectedMessageCount={4} />
+  )
+  .add('no messages selected', () =>
+    <ToolbarComponent messages={messages} selectedMessageCount={0} />
+  );
