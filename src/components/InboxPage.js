@@ -7,7 +7,9 @@ import ComposeFormComponent from '../components/ComposeForm/ComposeFormComponent
 export default function InboxPage({
   messages,
   selectedMessageIds,
-  showComposeForm
+  showComposeForm,
+  onMarkAsReadMessage,
+  onSelectMessage
 }) {
   return (
     <div className="InboxPage">
@@ -18,7 +20,9 @@ export default function InboxPage({
         />
         <MessagesComponent
           messages={messages}
-          selectedMessageIds={selectedMessageIds}
+          onSelectMessage={onSelectMessage}
+          onMarkAsReadMessage={onMarkAsReadMessage}
+          key="messagecomponent"
         />
         {showComposeForm && <ComposeFormComponent />}
       </InboxPageLayout>

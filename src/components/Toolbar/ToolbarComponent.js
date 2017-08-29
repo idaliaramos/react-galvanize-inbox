@@ -10,7 +10,7 @@ export default function ToolbarComponent({ messages, selectedMessageCount }) {
       selectedMessageCount > 0 && selectedMessageCount < messages.length,
     'fa-square-o': selectedMessageCount === 0
   });
-  console.log(isSelectedClassNames);
+
   function disable() {
     if (selectedMessageCount === 0) {
       return 'disabled';
@@ -19,12 +19,16 @@ export default function ToolbarComponent({ messages, selectedMessageCount }) {
     }
   }
   //  let disable = selectedMessageCount===0 ? "disabled" : ""
-
+  function selectAll(event) {
+    event.preventDefault();
+    console.log('delekjdfkdjaf');
+    //add event that on click of the checkbox button  all messages will be selected
+  }
   return (
     <div className="row toolbar">
       <div className="col-md-12">
         <p className="pull-right">
-          <span className="badge badge">2</span>
+          <span className="badge badge">{messages.length}</span>
           unread messages
         </p>
 

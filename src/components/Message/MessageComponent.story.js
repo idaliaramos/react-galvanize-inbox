@@ -3,19 +3,10 @@ import { storiesOf } from '@storybook/react';
 import MessageComponent from './MessageComponent';
 // import ReadUnstarredMessageComponent from './ReadUnstarredMessageComponent';
 
-// let message = {
-//   id: 1,
-//   subject:
-//     "You can't input the protocol without calculating the mobile RSS protocol!",
-//   read: false,
-//   starred: true,
-//   labels: ['dev', 'personal'],
-//   selected: false
-// };
-
 storiesOf('MessageComponent', module)
   .add('Unread Unstarred', () =>
     <MessageComponent
+      key="messagecomponent"
       message={{
         id: 1,
         subject:
@@ -29,6 +20,7 @@ storiesOf('MessageComponent', module)
   )
   .add('Read UNStarred', () =>
     <MessageComponent
+      key="messagecomponent"
       message={{
         id: 1,
         subject:
@@ -42,6 +34,7 @@ storiesOf('MessageComponent', module)
   )
   .add('Selected', () =>
     <MessageComponent
+      key="messagecomponent"
       message={{
         id: 1,
         subject:
@@ -55,6 +48,7 @@ storiesOf('MessageComponent', module)
   )
   .add('Starred', () =>
     <MessageComponent
+      key="messagecomponent"
       message={{
         id: 1,
         subject:
@@ -68,6 +62,7 @@ storiesOf('MessageComponent', module)
   )
   .add('With Labels', () =>
     <MessageComponent
+      key="messagecomponent"
       message={{
         id: 1,
         subject:

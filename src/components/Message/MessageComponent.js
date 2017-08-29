@@ -1,7 +1,29 @@
 import React from 'react';
 var classNames = require('classnames');
 
-export default function MessageComponent({ message, selected }) {
+export default function MessageComponent({
+  messages,
+  message,
+  selected,
+  onSelectMessage,
+  onMarkAsReadMessage,
+  onDeselectMessage
+}) {
+  function handleCheckClick(e) {
+    e.preventDefault();
+    if (!message.selected) {
+      onSelectMessage(message);
+    } else {
+      console.log('hey');
+      // onDeselectMessage(message);
+    }
+  }
+  function handleSubjectClick(e) {
+    e.preventDefault();
+    //put new callback function here
+    onMarkAsReadMessage(message);
+  }
+  console.log('Messqt', messages);
   let messageClassNames = classNames({
     row: true,
     message: true,
@@ -12,17 +34,10 @@ export default function MessageComponent({ message, selected }) {
     selected: selected
   });
 
-  // let messageClassNames = 'row message';
-  // if (message.read) {
-  //   messageClassNames = messageClassNames + ' read';
-  // } else {
-  //   messageClassNames = messageClassNames + ' unread';
-  // }
-
   function renderLabels(labels) {
     return labels.map(label => {
       return (
-        <span className="label label-warning">
+        <span className="label label-warning" key="renderl">
           {label}
         </span>
       );
@@ -34,7 +49,11 @@ export default function MessageComponent({ message, selected }) {
       <div className="col-xs-1">
         <div className="row">
           <div className="col-xs-2">
-            <input type="checkbox" checked={selected ? 'checked' : null} />
+            <input
+              type="checkbox"
+              checked={selected ? 'checked' : null}
+              onClick={handleCheckClick}
+            />
           </div>
           <div className="col-xs-2">
             <i className={`star fa fa-star${message.starred ? '' : '-o'}`} />
@@ -43,7 +62,8 @@ export default function MessageComponent({ message, selected }) {
       </div>
       <div className="col-xs-11">
         {renderLabels(message.labels)}
-        <a href="#">
+        <a href="a">
+          onClick={handleSubjectClick}
           {message.subject}
         </a>
       </div>
