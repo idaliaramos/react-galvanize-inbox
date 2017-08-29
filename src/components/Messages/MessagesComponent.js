@@ -11,11 +11,12 @@ export default function MessagesComponent({
   onStarMessage,
   onUnstarMessage
 }) {
-  console.log(messages);
+  console.log('on Select message >>>>>>>>', onSelectMessage);
   return (
     <div className="MessagesComponent">
       {messages.map(message =>
         <MessageComponent
+          key={message.id}
           message={message}
           messages={messages}
           selectedMessageIds={selectedMessageIds}

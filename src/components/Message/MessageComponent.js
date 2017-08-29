@@ -11,10 +11,13 @@ export default function MessageComponent({
 }) {
   function handleCheckClick(e) {
     e.preventDefault();
-    if (!message.selected) {
-      onSelectMessage(message);
+    if (message.selected) {
+      onSelectMessage(message.id);
+    }
+    if (!selected) {
+      selected: selected;
     } else {
-      console.log('hey');
+      selected: !selected;
       // onDeselectMessage(message);
     }
   }
@@ -37,7 +40,7 @@ export default function MessageComponent({
   function renderLabels(labels) {
     return labels.map(label => {
       return (
-        <span className="label label-warning" key="renderl">
+        <span className="label label-warning" key={message.id}>
           {label}
         </span>
       );
@@ -45,7 +48,7 @@ export default function MessageComponent({
   }
 
   return (
-    <div className={(messageClassNames, selectedClassNames)}>
+    <div className={(messageClassNames, selectedClassNames)} key={message.id}>
       <div className="col-xs-1">
         <div className="row">
           <div className="col-xs-2">
@@ -60,10 +63,9 @@ export default function MessageComponent({
           </div>
         </div>
       </div>
-      <div className="col-xs-11">
+      <div className="col-xs-11" key={message.id}>
         {renderLabels(message.labels)}
-        <a href="a">
-          onClick={handleSubjectClick}
+        <a href="a" onClick={handleSubjectClick}>
           {message.subject}
         </a>
       </div>

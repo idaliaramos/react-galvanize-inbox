@@ -74,24 +74,27 @@ let messages = [
   }
 ];
 
-let selectedMessageIds = [1, 3, 5];
+let selectedMessageIds = [];
 
 let showComposeForm = true;
 
-function onSelectMessage(message) {
-  selectedMessageIds.push(message.id);
+function onSelectMessage(messageId) {
+  selectedMessageIds.push(messageId);
+  console.log('this is the updated array', selectedMessageIds);
   render();
 }
 
-function onMarkAsReadMessage(message) {
-  console.log('is subject clicked', message);
-  message.read = false;
+function onMarkAsReadMessage(messageId) {
+  console.log('is subject clicked', messageId);
+  // message.read = false;
   render();
 }
-function onDeselectMessage(message) {
-  console.log('deselectedmeow');
+function onDeselectMessage(messageId) {
+  console.log('deselected');
 }
-console.log('this is D', onDeselectMessage());
+function onStarMessage(messageId) {}
+
+function onUnstarMessage(messageId) {}
 
 function render() {
   ReactDOM.render(

@@ -9,7 +9,8 @@ export default function InboxPage({
   selectedMessageIds,
   showComposeForm,
   onMarkAsReadMessage,
-  onSelectMessage
+  onSelectMessage,
+  onDeselectMessage
 }) {
   return (
     <div className="InboxPage">
@@ -22,6 +23,7 @@ export default function InboxPage({
           messages={messages}
           onSelectMessage={onSelectMessage}
           onMarkAsReadMessage={onMarkAsReadMessage}
+          onDeselectMessage={onDeselectMessage}
           key="messagecomponent"
         />
         {showComposeForm && <ComposeFormComponent />}

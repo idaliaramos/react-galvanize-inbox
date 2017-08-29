@@ -9,9 +9,9 @@ export default function ComposeFormComponent() {
         </div>
       </div>
       <div className="form-group">
-        <htmlFor for="subject" className="col-sm-2 control-label">
+        <div htmlFor="subject" className="col-sm-2 control-label">
           Subject
-        </htmlFor>
+        </div>
         <div className="col-sm-8">
           <input
             type="text"
@@ -23,7 +23,7 @@ export default function ComposeFormComponent() {
         </div>
       </div>
       <div className="form-group">
-        <label for="body" className="col-sm-2 control-label">
+        <label htmlFor="body" className="col-sm-2 control-label">
           Body
         </label>
         <div className="col-sm-8">
