@@ -1,74 +1,100 @@
 import React from 'react';
 var classNames = require('classnames');
 
-export default function MessageComponent({
-  messages,
-  message,
-  selected,
-  onSelectMessage,
-  onMarkAsReadMessage,
-  onDeselectMessage
-}) {
-  function handleCheckClick(e) {
-    e.preventDefault();
-    if (message.selected) {
-      onSelectMessage(message.id);
-    }
-    if (!selected) {
-      selected: selected;
-    } else {
-      selected: !selected;
-      // onDeselectMessage(message);
-    }
-  }
-  function handleSubjectClick(e) {
-    e.preventDefault();
-    //put new callback function here
-    onMarkAsReadMessage(message);
-  }
-  console.log('Messqt', messages);
-  let messageClassNames = classNames({
-    row: true,
-    message: true,
-    unread: !message.read,
-    read: message.read
-  });
-  let selectedClassNames = classNames({
-    selected: selected
-  });
+export default class MessageComponent extends React.Component {
+  static defaultProps = {
+    onSelectMessage: () => {},
+    onDeselectMessage: () => {},
+    onMarkAsReadMessage: () => {},
+    onMarkAsUnreadSelectedMessages: () => {},
+    onStarMessage: () => {},
+    onUnstarMessage: () => {}
+  };
 
-  function renderLabels(labels) {
+  _handleCheckClick = event => {
+    // const onSubmit = this.props.onSubmit || (() => {}); // See defaultProps above
+    const { onSelectMessage } = this.props;
+    const { onDeselectMessage } = this.props;
+    if (!this.props.selected) {
+      onSelectMessage(this.props.message.id);
+    } else {
+      onDeselectMessage(this.props.message.id);
+    }
+  };
+
+  _handleReadClick = event => {
+    event.preventDefault();
+    // const onSubmit = this.props.onSubmit || (() => {}); // See defaultProps above
+    const { onMarkAsReadMessage } = this.props;
+
+    if (!this.props.message.read) {
+      onMarkAsReadMessage(this.props.message.id);
+    }
+  };
+
+  _handleStarClick = event => {
+    const { onStarMessage } = this.props;
+    const { onUnstarMessage } = this.props;
+    // console.log('star props', this.props);
+    event.preventDefault();
+    if (!this.props.message.starred) {
+      onStarMessage(this.props.message.id);
+    } else {
+      onUnstarMessage(this.props.message.id);
+    }
+  };
+
+  renderLabels(labels) {
     return labels.map(label => {
       return (
-        <span className="label label-warning" key={message.id}>
+        <span className="label label-warning">
           {label}
         </span>
       );
     });
   }
 
-  return (
-    <div className={(messageClassNames, selectedClassNames)} key={message.id}>
-      <div className="col-xs-1">
-        <div className="row">
-          <div className="col-xs-2">
-            <input
-              type="checkbox"
-              checked={selected ? 'checked' : null}
-              onClick={handleCheckClick}
-            />
-          </div>
-          <div className="col-xs-2">
-            <i className={`star fa fa-star${message.starred ? '' : '-o'}`} />
+  render() {
+    // const { message } = this.props
+    const message = this.props.message;
+
+    let messageClassNames = classNames({
+      row: true,
+      message: true,
+      unread: !message.read,
+      read: message.read,
+      selected: message.selected
+    });
+    // console.log('this is the message', message);
+    // console.log(messageClassNames);
+    return (
+      <div className={messageClassNames}>
+        <div className="col-xs-1">
+          <div className="row">
+            <div className="col-xs-2">
+              <input
+                type="checkbox"
+                // checked={this.state.selected ? 'checked' : null}
+                checked={this.props.selected === true}
+                // defaultChecked={this.state.selected === true}
+                onClick={this._handleCheckClick}
+              />
+            </div>
+            <div className="col-xs-2">
+              <i
+                className={`star fa fa-star${message.starred ? '' : '-o'}`}
+                onClick={this._handleStarClick}
+              />
+            </div>
           </div>
         </div>
+        <div className="col-xs-11" onClick={this._handleReadClick}>
+          {this.renderLabels(message.labels)}
+          <a href="a">
+            {message.subject}
+          </a>
+        </div>
       </div>
-      <div className="col-xs-11" key={message.id}>
-        {renderLabels(message.labels)}
-        <a href="a" onClick={handleSubjectClick}>
-          {message.subject}
-        </a>
-      </div>
-    </div>
-  );
+    );
+  }
 }

@@ -9,22 +9,30 @@ export default function MessagesComponent({
   onDeselectMessage,
   onMarkAsReadMessage,
   onStarMessage,
-  onUnstarMessage
+  onUnstarMessage,
+  selected,
+  onDeselectAllMessages,
+  onMarkAsUnreadSelectedMessages,
+  onDeleteSelectedMessages
 }) {
-  console.log('on Select message >>>>>>>>', onSelectMessage);
+  // console.log('on Select message >>>>>>>>', onSelectMessage);
+  // console.log('selectedMessageIds', selectedMessageIds);
   return (
     <div className="MessagesComponent">
       {messages.map(message =>
         <MessageComponent
-          key={message.id}
           message={message}
-          messages={messages}
+          selected={selectedMessageIds.includes(message.id)}
+          key={message.id}
           selectedMessageIds={selectedMessageIds}
           onMarkAsReadMessage={onMarkAsReadMessage}
           onSelectMessage={onSelectMessage}
           onDeselectMessage={onDeselectMessage}
           onStarMessage={onStarMessage}
           onUnstarMessage={onUnstarMessage}
+          onDeselectAllMessages={onDeselectAllMessages}
+          onMarkAsUnreadSelectedMessages={onMarkAsUnreadSelectedMessages}
+          onDeleteSelectedMessages={onDeleteSelectedMessages}
         />
       )}
     </div>

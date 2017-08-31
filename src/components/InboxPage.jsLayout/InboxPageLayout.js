@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function IndexPageLayout(prop) {
+export default function InboxPageLayout(prop) {
   return (
     <div>
       <div>

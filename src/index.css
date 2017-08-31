@@ -78,3 +78,6 @@ footer.spacer {
 .fa-close {
   cursor: pointer;
 }
+[type="submit"] + [type="reset"] {
+  margin-left: 5px;
+}

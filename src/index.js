@@ -8,7 +8,7 @@ import './index.css';
 // import InboxPageLayout from './components/InboxPageLayout/InboxPageLayout';
 import InboxPage from './components/InboxPage';
 
-let messages = [
+var messages = [
   {
     id: 1,
     subject:
@@ -37,7 +37,7 @@ let messages = [
   {
     id: 4,
     subject: 'We need to program the primary TCP hard drive!',
-    read: true,
+    read: false,
     starred: false,
     selected: true,
     labels: []
@@ -73,39 +73,98 @@ let messages = [
     labels: []
   }
 ];
-
+let selected = false;
 let selectedMessageIds = [];
 
 let showComposeForm = true;
 
+// let readMessages = [];
+
 function onSelectMessage(messageId) {
   selectedMessageIds.push(messageId);
-  console.log('this is the updated array', selectedMessageIds);
   render();
 }
 
-function onMarkAsReadMessage(messageId) {
-  console.log('is subject clicked', messageId);
-  // message.read = false;
-  render();
-}
 function onDeselectMessage(messageId) {
   console.log('deselected');
+  selectedMessageIds.splice(selectedMessageIds.indexOf(messageId), 1);
+  render();
 }
-function onStarMessage(messageId) {}
+function onStarMessage(messageId) {
+  messages.filter(message => message.id === messageId)[0].starred = true;
+  render();
+}
+function onUnstarMessage(messageId) {
+  messages.filter(message => message.id === messageId)[0].starred = false;
+  render();
+}
+function onMarkAsReadMessage(messageId) {
+  console.log('got to the read message');
 
-function onUnstarMessage(messageId) {}
+  let foo = messages.find(message => message.id === messageId);
+  console.log('foo', foo);
+  if (foo) {
+    foo.read = true;
+  }
 
+  render();
+}
+function onSelectAllMessages() {
+  selectedMessageIds = messages.map(message => message.id);
+  render();
+}
+function onDeselectAllMessages() {
+  selectedMessageIds = [];
+  render();
+}
+function onMarkAsUnreadSelectedMessages() {
+  console.log('got to onMarkAsUnreadSelectedMessage');
+  for (let x = 0; x < selectedMessageIds.length; x++) {
+    for (let y = 0; y < messages.length; y++) {
+      if (messages[y].id === selectedMessageIds[x]) {
+        console.log('MY', messages[y]);
+        messages[y].read = false;
+      }
+    }
+  }
+  render();
+}
+function onDeleteSelectedMessages() {
+  console.log('ondelrealllmessages');
+  console.log(selectedMessageIds.length);
+  // arr = selectedMessageIds.filter(selectedMessageId => selectedMessageId !== value)
+  // }
+  messages = messages.filter(item => !selectedMessageIds.includes(item.id));
+  console.log('this is yo', messages);
+  render();
+}
+function onSubmit({ subject, body }) {
+  if (subject && body) {
+    console.log('form submitted');
+  }
+}
+
+function onCancel() {
+  console.log('im in the cancel');
+}
 function render() {
   ReactDOM.render(
     <InboxPage
+      selected={selected}
       messages={messages}
       selectedMessageIds={selectedMessageIds}
       showComposeForm={showComposeForm}
       onSelectMessage={onSelectMessage}
       onDeselectMessage={onDeselectMessage}
       onMarkAsReadMessage={onMarkAsReadMessage}
-      // onMarkAsReadMessage={onMarkAsReadMessage}
+      onUnstarMessage={onUnstarMessage}
+      onStarMessage={onStarMessage}
+      onSelectAllMessages={onSelectAllMessages}
+      onDeselectAllMessages={onDeselectAllMessages}
+      onMarkAsUnreadSelectedMessages={onMarkAsUnreadSelectedMessages}
+      onSubmit={onSubmit}
+      onCancel={onCancel}
+      onDeleteSelectedMessages={onDeleteSelectedMessages}
     />,
     document.getElementById('root')
   );
