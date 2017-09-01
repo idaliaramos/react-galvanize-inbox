@@ -147,6 +147,41 @@ function onSubmit({ subject, body }) {
 function onCancel() {
   console.log('im in the cancel');
 }
+
+function onApplyLabelSelectedMessages(label) {
+  selectedMessageIds.forEach(messageId => {
+    const message = messages.find(function(message) {
+      return message.id === messageId;
+    });
+    message.labels.push(label);
+  });
+  render();
+}
+
+function onRemoveLabelSelectedMessages(label) {
+  //   selectedMessageIds.forEach(messageId => {
+  //     const message = messages.find(function(message) {
+  //       return message.id === messageId;
+  //     });
+  //     message.labels.pop(label);
+  //   });
+  //   render();
+  // }
+  // selectedMessageIds.forEach(messageId => {
+  //   let message = messages.find(function(message) {
+  //     return message.id === messageId;
+  //   });
+  //   message.labels.slice(message.labels.indexOf(label));
+  // });
+  selectedMessageIds.forEach(messageId => {
+    const message = messages.find(function(message) {
+      return message.id === messageId;
+    });
+    message.labels.splice(message.labels.indexOf(label), 1);
+  });
+  render();
+}
+// selectedMessageIds.splice(message.labels.indexOf(messageId), 1);
 function render() {
   ReactDOM.render(
     <InboxPage
@@ -165,6 +200,8 @@ function render() {
       onSubmit={onSubmit}
       onCancel={onCancel}
       onDeleteSelectedMessages={onDeleteSelectedMessages}
+      onApplyLabelSelectedMessages={onApplyLabelSelectedMessages}
+      onRemoveLabelSelectedMessages={onRemoveLabelSelectedMessages}
     />,
     document.getElementById('root')
   );

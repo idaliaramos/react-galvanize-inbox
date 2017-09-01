@@ -46,6 +46,19 @@ export default function ToolbarComponent({
     console.log('about to delete');
     onDeleteSelectedMessages();
   }
+
+  function handleLabelClick(event) {
+    // event.preventDefault();
+    let label = event.target.value;
+    console.log(label);
+    onApplyLabelSelectedMessages(label);
+  }
+
+  function handleRemoveLabel(event) {
+    let label = event.target.value;
+    onRemoveLabelSelectedMessages(label);
+  }
+
   //  let disable = selectedMessageCount===0 ? "disabled" : ""
 
   //add event that on click of the checkbox button  all messages will be selected
@@ -77,14 +90,20 @@ export default function ToolbarComponent({
           Mark As Unread
         </button>
 
-        <select className="form-control label-select" disabled={disable()}>
+        <select
+          className="form-control label-select"
+          disabled={disable()}
+          onChange={handleLabelClick}>
           <option>Apply label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>
         </select>
 
-        <select className="form-control label-select" disabled={disable()}>
+        <select
+          className="form-control label-select"
+          disabled={disable()}
+          onChange={handleRemoveLabel}>
           <option>Remove label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
