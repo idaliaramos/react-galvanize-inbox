@@ -76,9 +76,10 @@ var messages = [
 let selected = false;
 let selectedMessageIds = [];
 
-let showComposeForm = true;
+let showComposeForm = null;
 
-// let readMessages = [];
+let unreadMessages = [];
+let readMessages = [];
 
 function onSelectMessage(messageId) {
   selectedMessageIds.push(messageId);
@@ -124,28 +125,30 @@ function onMarkAsUnreadSelectedMessages() {
       if (messages[y].id === selectedMessageIds[x]) {
         console.log('MY', messages[y]);
         messages[y].read = false;
+        unreadMessages.push(messages.id);
+        console.log(unreadMessages);
       }
     }
   }
   render();
 }
 function onDeleteSelectedMessages() {
-  console.log('ondelrealllmessages');
-  console.log(selectedMessageIds.length);
-  // arr = selectedMessageIds.filter(selectedMessageId => selectedMessageId !== value)
-  // }
   messages = messages.filter(item => !selectedMessageIds.includes(item.id));
-  console.log('this is yo', messages);
+
   render();
 }
 function onSubmit({ subject, body }) {
   if (subject && body) {
     console.log('form submitted');
+    // showComposeForm = false;
   }
 }
 
 function onCancel() {
   console.log('im in the cancel');
+  showComposeForm = false;
+  console.log(showComposeForm);
+  render();
 }
 
 function onApplyLabelSelectedMessages(label) {
@@ -159,20 +162,6 @@ function onApplyLabelSelectedMessages(label) {
 }
 
 function onRemoveLabelSelectedMessages(label) {
-  //   selectedMessageIds.forEach(messageId => {
-  //     const message = messages.find(function(message) {
-  //       return message.id === messageId;
-  //     });
-  //     message.labels.pop(label);
-  //   });
-  //   render();
-  // }
-  // selectedMessageIds.forEach(messageId => {
-  //   let message = messages.find(function(message) {
-  //     return message.id === messageId;
-  //   });
-  //   message.labels.slice(message.labels.indexOf(label));
-  // });
   selectedMessageIds.forEach(messageId => {
     const message = messages.find(function(message) {
       return message.id === messageId;
@@ -181,7 +170,17 @@ function onRemoveLabelSelectedMessages(label) {
   });
   render();
 }
-// selectedMessageIds.splice(message.labels.indexOf(messageId), 1);
+function onOpenComposeForm() {
+  showComposeForm = true;
+  render();
+}
+// function unreadMessage() {
+//   messages.map(
+//     message =>
+//       !message.read ? unreadMessages.push(message) : readMessages.push(message)
+//   );
+// }
+
 function render() {
   ReactDOM.render(
     <InboxPage
@@ -202,6 +201,13 @@ function render() {
       onDeleteSelectedMessages={onDeleteSelectedMessages}
       onApplyLabelSelectedMessages={onApplyLabelSelectedMessages}
       onRemoveLabelSelectedMessages={onRemoveLabelSelectedMessages}
+      onOpenComposeForm={onOpenComposeForm}
+      unreadMessage={messages.map(
+        message =>
+          !message.read
+            ? unreadMessages.push(message)
+            : readMessages.push(message)
+      )}
     />,
     document.getElementById('root')
   );

@@ -1,6 +1,14 @@
 import React from 'react';
 // import MessageComponent from '../Message/MessageComponent';
 var classNames = require('classnames');
+// document.addEventListener('DOMContentLoaded', function unreadMessage() {
+//   messages.map(
+//     message =>
+//       !message.read
+//         ? unreadMessages.push(message)
+//         : readMessages.push(message)
+//   );
+// }, false);
 
 export default function ToolbarComponent({
   messages,
@@ -28,6 +36,8 @@ export default function ToolbarComponent({
       return null;
     }
   }
+  let unreadMessages = [];
+  let readMessages = [];
 
   function handleSelectallClick(event) {
     // event.preventDefault;
@@ -58,24 +68,35 @@ export default function ToolbarComponent({
     let label = event.target.value;
     onRemoveLabelSelectedMessages(label);
   }
-
+  function handleComposeForm() {
+    onOpenComposeForm();
+  }
+  function unreadMessage() {
+    messages.map(
+      message =>
+        !message.read
+          ? unreadMessages.push(message)
+          : readMessages.push(message)
+    );
+    return unreadMessages.length;
+  }
   //  let disable = selectedMessageCount===0 ? "disabled" : ""
 
   //add event that on click of the checkbox button  all messages will be selected
-
+  let count = unreadMessage();
   return (
     <div className="row toolbar">
       <div className="col-md-12">
         <p className="pull-right">
-          <span className="badge badge">{messages.length}</span>
+          <span className="badge badge">{count}</span>
           unread messages
         </p>
 
         <p />
 
-        <a className="btn btn-danger">
-          <i className="fa fa-plus" onClick={disable} />
-        </a>
+        <button className="btn btn-danger" onClick={handleComposeForm}>
+          <i className="fa fa-plus" />
+        </button>
 
         <button
           className="btn btn-default"
