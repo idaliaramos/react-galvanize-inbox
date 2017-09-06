@@ -56,6 +56,7 @@ class App extends Component {
       this.state.selectedMessageIds.indexOf(messageId),
       1
     );
+    this.setState({ selected: false });
   };
 
   // function onStarMessage(messageId) {
@@ -227,23 +228,30 @@ class App extends Component {
   };
 
   onRemoveLabelSelectedMessages = labelToRemove => {
+    //message that we selected that also contains the label to remove
     let matchingMessages = this.state.messages.filter(
       message =>
         this.state.selectedMessageIds.includes(message.id) &&
         message.labels.includes(labelToRemove)
     );
+    //this is looking at each message and updating the list of labels to only
+    //have the labels we want
     matchingMessages.forEach(message => {
       let updatedLabels = message.labels.filter(
         label => label !== labelToRemove
       );
+      //send api update request
       updateMessage(message.id, {
         labels: updatedLabels.join()
       }).then(
+        //on success update data on client side and rerender
         function(messageData) {
+          //todo: what if there is no matching message,
           let message = this.state.messages.find(
             message => message.id === messageData.id
           );
           message.labels = messageData.labels;
+          //ask nestor about messages being set to itself
           this.setState({ messages: this.state.messages });
         }.bind(this)
       );
