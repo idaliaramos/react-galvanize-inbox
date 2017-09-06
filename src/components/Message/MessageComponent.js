@@ -8,7 +8,8 @@ export default class MessageComponent extends React.Component {
     onMarkAsReadMessage: () => {},
     onMarkAsUnreadSelectedMessages: () => {},
     onStarMessage: () => {},
-    onUnstarMessage: () => {}
+    onUnstarMessage: () => {},
+    updateUnreadMessages: () => {}
   };
 
   _handleCheckClick = event => {
@@ -26,7 +27,6 @@ export default class MessageComponent extends React.Component {
     event.preventDefault();
     // const onSubmit = this.props.onSubmit || (() => {}); // See defaultProps above
     const { onMarkAsReadMessage } = this.props;
-
     if (!this.props.message.read) {
       onMarkAsReadMessage(this.props.message.id);
     }
@@ -44,7 +44,8 @@ export default class MessageComponent extends React.Component {
     }
   };
 
-  renderLabels(labels) {
+  renderLabels = labels => {
+    // console.log(labels);
     return labels.map(label => {
       return (
         <span className="label label-warning">
@@ -52,12 +53,18 @@ export default class MessageComponent extends React.Component {
         </span>
       );
     });
-  }
+  };
+
+  updateLabels = updatedLabels => {
+    this.setState({
+      labels: updatedLabels
+    });
+  };
 
   render() {
     // const { message } = this.props
     const message = this.props.message;
-
+    // console.log('>>>', this.props.message);
     let messageClassNames = classNames({
       row: true,
       message: true,
@@ -65,8 +72,7 @@ export default class MessageComponent extends React.Component {
       read: message.read,
       selected: message.selected
     });
-    // console.log('this is the message', message);
-    // console.log(messageClassNames);
+
     return (
       <div className={messageClassNames}>
         <div className="col-xs-1">
@@ -89,7 +95,7 @@ export default class MessageComponent extends React.Component {
           </div>
         </div>
         <div className="col-xs-11" onClick={this._handleReadClick}>
-          {this.renderLabels(message.labels)}
+          {message.labels && this.renderLabels(message.labels)}
           <a href="a">
             {message.subject}
           </a>
