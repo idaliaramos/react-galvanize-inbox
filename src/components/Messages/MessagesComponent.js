@@ -15,8 +15,8 @@ export default function MessagesComponent({
   onMarkAsUnreadSelectedMessages,
   onDeleteSelectedMessages
 }) {
-  // console.log('on Select message >>>>>>>>', onSelectMessage);
-  // console.log('selectedMessageIds', selectedMessageIds);
+  // 
+  // 
   return (
     <div className="MessagesComponent">
       {messages.map(message =>

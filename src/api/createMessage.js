@@ -1,17 +1,14 @@
-export default function updateMessage(messageId, change) {
-  return fetch(
-    `https://api.airtable.com/v0/appmho3DsLWsNz2E6/messages/${messageId}`,
-    {
-      method: 'PATCH',
-      headers: {
-        Authorization: 'Bearer key3qboRJqEMAfhtg',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        fields: change
-      })
-    }
-  )
+export default function createMessage(message) {
+  return fetch('https://api.airtable.com/v0/appmho3DsLWsNz2E6/messages/', {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer key3qboRJqEMAfhtg',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      fields: message
+    })
+  })
     .then(response => response.json())
     .then(record => {
       return {

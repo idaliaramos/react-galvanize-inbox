@@ -35,7 +35,7 @@ export default class MessageComponent extends React.Component {
   _handleStarClick = event => {
     const { onStarMessage } = this.props;
     const { onUnstarMessage } = this.props;
-    // console.log('star props', this.props);
+    //
     event.preventDefault();
     if (!this.props.message.starred) {
       onStarMessage(this.props.message.id);
@@ -45,7 +45,7 @@ export default class MessageComponent extends React.Component {
   };
 
   renderLabels = labels => {
-    // console.log(labels);
+    //
     return labels.map(label => {
       return (
         <span className="label label-warning">
@@ -64,7 +64,7 @@ export default class MessageComponent extends React.Component {
   render() {
     // const { message } = this.props
     const message = this.props.message;
-    // console.log('>>>', this.props.message);
+    //
     let messageClassNames = classNames({
       row: true,
       message: true,

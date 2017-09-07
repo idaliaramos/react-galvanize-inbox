@@ -13,9 +13,5 @@ export default function deleteMessage(messageId) {
         }
       })
     }
-  )
-    .then(response => response.json())
-    .then(message => {
-      console.log('im in the delte api', message);
-    });
+  ).then(response => response.json());
 }

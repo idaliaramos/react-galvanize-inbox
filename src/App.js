@@ -4,6 +4,7 @@ import GetMessages from './api/GetMessages';
 // import postStarred from './api/postStarred';
 import deleteMessage from './api/deleteMessage';
 import updateMessage from './api/updateMessage';
+import createMessage from './api/createMessage';
 // import './App.css';
 
 class App extends Component {
@@ -46,6 +47,34 @@ class App extends Component {
       </div>
     );
   }
+
+  onSubmit = message => {
+    let newMessage = {
+      fields: {
+        subject: message.subject,
+        body: message.body,
+        read: false,
+        starred: false,
+        labels: 'new'
+      }
+    };
+
+    createMessage(message).then(newMessage => {
+      this.setState(prevState => {
+        let newMessages = prevState.messages.slice(0);
+        newMessages.unshift(message);
+        return {
+          messages: newMessages,
+          showComposeForm: false
+        };
+      });
+    });
+  };
+
+  onCancel = () => {
+    this.setState({ showComposeForm: false });
+  };
+
   onSelectMessage = messageId => {
     this.state.selectedMessageIds.push(messageId);
     this.setState({ selected: true });
@@ -58,11 +87,6 @@ class App extends Component {
     );
     this.setState({ selected: false });
   };
-
-  // function onStarMessage(messageId) {
-  //   messages.filter(message => message.id === messageId)[0].starred = true;
-  // }
-  //
 
   onStarMessage = messageId => {
     updateMessage(messageId, { starred: true }).then(res => {
@@ -126,24 +150,6 @@ class App extends Component {
       )
     );
   };
-  // console.log(this.state.selectedMessageIds);
-  // for (let id of this.state.selectedMessageIds) {
-  //   updateUnreadMessages(id);
-
-  // onMarkAsUnreadSelectedMessages = messageId => {
-  //   updateUnreadMessages(messageId).then();
-
-  // console.log('got to onMarkAsUnreadSelectedMessage');
-  // for (let x = 0; x < this.state.selectedMessagesIds.length; x++) {
-  //   for (let y = 0; y < this.state.messages.length; y++) {
-  //     if (this.state.messages[y].id === this.state.selectedMessagesIds[x]) {
-  //       this.state.messages[y].read = false;
-  //       this.state.unreadMessages.push(this.state.messages.id);
-  //       console.log(this.state.unreadMessages);
-  //     }
-  //   }
-  // }
-  // };
 
   onSelectAllMessages = () => {
     this.setState(prevState => {
@@ -152,18 +158,6 @@ class App extends Component {
       return { selectedMessageIds: newSelectedMessageIds };
     });
   };
-
-  // onDeleteSelectedMessages = () => {
-  //   this.setState(prevState => {
-  //     let newOnDeleteSelectedMessages = prevState.selectedMessageIds.slice(0);
-  //     newOnDeleteSelectedMessages = this.state.messages.filter(
-  //       item => !this.state.selectedMessageIds.includes(item.id)
-  //     );
-  //     return {
-  //       onDeleteSelectedMessages: newOnDeleteSelectedMessages
-  //     };
-  //   });
-  // };
 
   onDeleteSelectedMessages = () => {
     this.state.selectedMessageIds.forEach(messageId =>
@@ -181,25 +175,8 @@ class App extends Component {
     );
   };
 
-  //   for (let id of this.state.selectedMessageIds) {
-  //     deleteMessage(id);
-  //   }
-  // };
-
-  // onDeleteSelectedMessages = () => {
-  //   this.state.messages = this.state.messages.filter(
-  //     item => !this.state.selectedMessageIds.includes(item.id)
-  //   );
-  // };
-
   onDeselectAllMessages = () => {
     this.setState({ selectedMessageIds: [] });
-  };
-
-  onSubmit = ({ subject, body }) => {
-    if (subject && body) {
-    }
-    this.setState({ showComposeForm: false });
   };
 
   onCancel = () => {
@@ -207,7 +184,6 @@ class App extends Component {
   };
 
   onApplyLabelSelectedMessages = label => {
-    // let newSetofMessages = this.state.messages.splice(0);
     let matchingMessages = this.state.messages.filter(message =>
       this.state.selectedMessageIds.includes(message.id)
     );
@@ -228,7 +204,6 @@ class App extends Component {
   };
 
   onRemoveLabelSelectedMessages = labelToRemove => {
-    //message that we selected that also contains the label to remove
     let matchingMessages = this.state.messages.filter(
       message =>
         this.state.selectedMessageIds.includes(message.id) &&
@@ -290,7 +265,6 @@ class App extends Component {
       this.setState(prevState => {
         return { messages: filteredResults };
       });
-      // this.setState({ messages: filteredResults });
     });
   }
 }

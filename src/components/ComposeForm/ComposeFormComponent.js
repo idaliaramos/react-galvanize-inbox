@@ -3,15 +3,18 @@ import React from 'react';
 export default function ComposeFormComponent({ onCancel, onSubmit }) {
   function handleClickCancel() {
     // event.preventDefault();
-    console.log('cancel');
+
     onCancel();
   }
   function handleOnSubmit(event) {
     event.preventDefault();
-    console.log('submited');
-    // onSubmit({subject, body});
-  }
+    let $subject = document.getElementById('subject').value;
+    let $body = document.getElementById('body').value;
 
+    let message = { subject: $subject, body: $body };
+
+    onSubmit(message);
+  }
   return (
     <form className="form-horizontal well" onSubmit={handleOnSubmit}>
       <div className="form-group">

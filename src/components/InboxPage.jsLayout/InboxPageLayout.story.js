@@ -80,11 +80,11 @@ function onSelectMessage(message) {
 }
 
 function onMarkAsReadMessage(message) {
-  console.log('is subject clicked', message);
+  
   message.read = false;
 }
 function onDeselectMessage(message) {
-  console.log('deselected');
+  
 }
 
 storiesOf('InboxPageLayout', module)

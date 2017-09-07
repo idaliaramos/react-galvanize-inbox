@@ -1,14 +1,6 @@
 import React from 'react';
 // import MessageComponent from '../Message/MessageComponent';
 var classNames = require('classnames');
-// document.addEventListener('DOMContentLoaded', function unreadMessage() {
-//   messages.map(
-//     message =>
-//       !message.read
-//         ? unreadMessages.push(message)
-//         : readMessages.push(message)
-//   );
-// }, false);
 
 export default function ToolbarComponent({
   messages,
@@ -53,14 +45,13 @@ export default function ToolbarComponent({
     onMarkAsUnreadSelectedMessages();
   }
   function handleDeleteMessages() {
-    console.log('about to delete');
     onDeleteSelectedMessages();
   }
 
   function handleLabelClick(event) {
     // event.preventDefault();
     let label = event.target.value;
-    console.log(label);
+
     onApplyLabelSelectedMessages(label);
   }
 
@@ -80,9 +71,6 @@ export default function ToolbarComponent({
     );
     return unreadMessages.length;
   }
-  //  let disable = selectedMessageCount===0 ? "disabled" : ""
-
-  //add event that on click of the checkbox button  all messages will be selected
   let count = unreadMessage();
   return (
     <div className="row toolbar">
