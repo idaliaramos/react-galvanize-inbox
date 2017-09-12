@@ -8,13 +8,21 @@ import createMessage from './api/createMessage';
 // import './App.css';
 
 class App extends Component {
-  state = {
-    messages: [],
-    selected: false,
-    selectedMessageIds: [],
-    showComposeForm: null,
-    unreadMessages: []
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      messages: [],
+      selected: false,
+      selectedMessageIds: [],
+      showComposeForm: null,
+      unreadMessages: []
+    };
+
+    this.props.store.subscribe(() => {
+      this.setState(this.props.store.getState());
+    });
+  }
 
   render() {
     return (
@@ -34,6 +42,7 @@ class App extends Component {
               !message.read ? this.state.unreadMessages.push(message) : null
           )}
           onMarkAsUnreadSelectedMessages={this.onMarkAsUnreadSelectedMessages}
+          onMarkAsReadSelectedMessages={this.onMarkAsReadSelectedMessages}
           onUnstarMessage={this.onUnstarMessage}
           onStarMessage={this.onStarMessage}
           onSelectAllMessages={this.onSelectAllMessages}
@@ -76,16 +85,26 @@ class App extends Component {
   };
 
   onSelectMessage = messageId => {
-    this.state.selectedMessageIds.push(messageId);
-    this.setState({ selected: true });
+    this.setState(prevState => {
+      let newSelected = prevState.selectedMessageIds.slice(0);
+      newSelected.push(messageId);
+      return {
+        selectedMessageIds: newSelected,
+        selectedMessageCount: newSelected.length
+      };
+    });
   };
 
   onDeselectMessage = messageId => {
-    this.state.selectedMessageIds.splice(
-      this.state.selectedMessageIds.indexOf(messageId),
-      1
-    );
-    this.setState({ selected: false });
+    this.setState(prevState => {
+      let newSelectedMessageIds = prevState.selectedMessageIds.slice(0);
+      let removeIndex = newSelectedMessageIds.indexOf(messageId);
+      newSelectedMessageIds.splice(removeIndex, 1);
+      return {
+        selectedMessageIds: newSelectedMessageIds,
+        selectedMessageCount: newSelectedMessageIds.length
+      };
+    });
   };
 
   onStarMessage = messageId => {
@@ -121,6 +140,7 @@ class App extends Component {
   };
 
   onMarkAsReadMessage = messageId => {
+    console.log('int the mark appjs read message', messageId);
     updateMessage(messageId, { read: true }).then(() => {
       this.setState(prevState => {
         let newMessages = prevState.messages.slice(0);
@@ -128,7 +148,8 @@ class App extends Component {
           readMessage => readMessage.id === messageId
         ).read = true;
         return {
-          messages: newMessages
+          messages: newMessages,
+          selectedMessageIds: []
         };
       });
     });
@@ -143,12 +164,34 @@ class App extends Component {
             prevState.selectedMessageIds.includes(message.id)
           );
           toChange.forEach(message => (message.read = false));
+
           return {
-            messages: newSetofMessages
+            messages: newSetofMessages,
+            selectedMessageIds: []
           };
         })
       )
     );
+  };
+
+  onMarkAsReadSelectedMessages = () => {
+    this.state.selectedMessageIds.forEach(messageId => {
+      updateMessage(messageId, { read: true }).then(() => {
+        this.setState(prevState => {
+          if (prevState.selectedMessageIds.length > 0) {
+            let newSetofMessages = prevState.messages.splice(0);
+            let toChange = newSetofMessages.filter(message =>
+              prevState.selectedMessageIds.includes(message.id)
+            );
+            toChange.forEach(message => (message.read = true));
+            return {
+              messages: newSetofMessages,
+              selectedMessageIds: []
+            };
+          }
+        });
+      });
+    });
   };
 
   onSelectAllMessages = () => {
@@ -196,7 +239,10 @@ class App extends Component {
       }).then(() =>
         GetMessages().then(filteredResults => {
           this.setState(prevState => {
-            return { messages: filteredResults };
+            return {
+              messages: filteredResults,
+              selectedMessageIds: []
+            };
           });
         })
       )
@@ -227,7 +273,10 @@ class App extends Component {
           );
           message.labels = messageData.labels;
           //ask nestor about messages being set to itself
-          this.setState({ messages: this.state.messages });
+          this.setState({
+            messages: this.state.messages,
+            selectedMessageIds: []
+          });
         }.bind(this)
       );
     });

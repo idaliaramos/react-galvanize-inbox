@@ -12,7 +12,8 @@ export default function ToolbarComponent({
   onMarkAsUnreadSelectedMessages,
   onApplyLabelSelectedMessages,
   onRemoveLabelSelectedMessages,
-  onDeleteSelectedMessages
+  onDeleteSelectedMessages,
+  onMarkAsReadMessage
 }) {
   let isSelectedClassNames = classNames({
     fa: true,
@@ -41,9 +42,17 @@ export default function ToolbarComponent({
   }
 
   function handleMarkAsUnread() {
+    console.log('inthe unread');
     // event.preventDefault;
     onMarkAsUnreadSelectedMessages();
   }
+  //this is the one when we click and it marks as read
+  function handleMarkSelectedAsRead() {
+    // event.preventDefault;
+    console.log('int the mark as read section');
+    onMarkAsReadSelectedMessages();
+  }
+
   function handleDeleteMessages() {
     onDeleteSelectedMessages();
   }
@@ -93,7 +102,9 @@ export default function ToolbarComponent({
           <i className={isSelectedClassNames} onClick={handleSelectallClick} />
         </button>
 
-        {/* <button className="btn btn-default">Mark As Read</button> */}
+        <button className="btn btn-default" onClick={handleMarkSelectedAsRead}>
+          Mark As Read
+        </button>
 
         <button className="btn btn-default" onClick={handleMarkAsUnread}>
           Mark As Unread
