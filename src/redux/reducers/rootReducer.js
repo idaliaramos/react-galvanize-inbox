@@ -36,32 +36,24 @@ export default function rootReducer(
         messages: newMarkAsReadMessages
       };
 
-    // this.setState(prevState => {
-    //   let newMessages = prevState.messages.slice(0);
-    //   newMessages.find(
-    //     readMessage => readMessage.id === messageId
-    //   ).read = true;
-    //   return {
-    //     messages: newMessages,
-    //     selectedMessageIds: []
-    //   };
-    // })
-
     case 'Mark_As_Unread':
-      return;
+      let newSetofMessages = currentState.messages.splice(0);
+      newSetofMessages.filter(message =>
+        currentState.selectedMessageIds.includes(message.id)
+      );
+      newSetofMessages.forEach(message => (message.read = false));
+      return {
+        ...currentState,
+        messages: newSetofMessages
+      };
 
     case 'Add-Label':
       return;
 
     case 'Remove_Label':
       return;
+
     case 'Add_New_Message':
-      // let messages = currentState.messages;
-      // messages.push({
-      //   subject: action.subject,
-      //   body: action.body
-      // });
-      // debugger;
       return {
         ...currentState,
         messages: [
@@ -71,7 +63,27 @@ export default function rootReducer(
       };
 
     case 'Remove_Message':
-      return;
+      let newMessagestoRemove = currentState.messages.splice(0);
+      let nMR = newMessagestoRemove.filter(
+        message => !currentState.selectedMessageIds.includes(action.messageId)
+      );
+      return {
+        ...currentState,
+        messages: nMR
+      };
+
+    //
+    // .then(() =>
+    //   this.setState(prevState => {
+    //     let newMessages = prevState.messages.splice(0);
+    //     let updatedMessages = newMessages.filter(
+    //       message => !prevState.selectedMessageIds.includes(message.id)
+    //     );
+    //     return {
+    //       messages: updatedMessages
+    //     };
+    //   })
+    // )
 
     default:
       return currentState;

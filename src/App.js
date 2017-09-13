@@ -126,37 +126,15 @@ class App extends Component {
   };
 
   onMarkAsReadMessage = messageId => {
-    console.log('int the mark appjs read message', messageId);
     updateMessage(messageId, { read: true }).then(() => {
       this.props.store.dispatch({ type: 'Mark_As_Read', messageId });
-      // this.setState(prevState => {
-      //   let newMessages = prevState.messages.slice(0);
-      //   newMessages.find(
-      //     readMessage => readMessage.id === messageId
-      //   ).read = true;
-      //   return {
-      //     messages: newMessages,
-      //     selectedMessageIds: []
-      //   };
-      // });
     });
   };
 
   onMarkAsUnreadSelectedMessages = () => {
     this.state.selectedMessageIds.forEach(messageId =>
       updateMessage(messageId, { read: false }).then(() =>
-        this.setState(prevState => {
-          let newSetofMessages = prevState.messages.splice(0);
-          let toChange = newSetofMessages.filter(message =>
-            prevState.selectedMessageIds.includes(message.id)
-          );
-          toChange.forEach(message => (message.read = false));
-
-          return {
-            messages: newSetofMessages,
-            selectedMessageIds: []
-          };
-        })
+        this.props.store.dispatch({ type: 'Mark_As_Unread', messageId })
       )
     );
   };
@@ -190,18 +168,22 @@ class App extends Component {
   };
 
   onDeleteSelectedMessages = () => {
-    this.state.selectedMessageIds.forEach(messageId =>
-      deleteMessage(messageId).then(() =>
-        this.setState(prevState => {
-          let newMessages = prevState.messages.splice(0);
-          let updatedMessages = newMessages.filter(
-            message => !prevState.selectedMessageIds.includes(message.id)
-          );
-          return {
-            messages: updatedMessages
-          };
-        })
-      )
+    this.state.selectedMessageIds.forEach(
+      messageId =>
+        deleteMessage(messageId).then(() =>
+          this.props.store.dispatch({ type: 'Remove_Message', messageId })
+        )
+      // .then(() =>
+      //   this.setState(prevState => {
+      //     let newMessages = prevState.messages.splice(0);
+      //     let updatedMessages = newMessages.filter(
+      //       message => !prevState.selectedMessageIds.includes(message.id)
+      //     );
+      //     return {
+      //       messages: updatedMessages
+      //     };
+      //   })
+      // )
     );
   };
 
@@ -217,10 +199,8 @@ class App extends Component {
     let matchingMessages = this.state.messages.filter(message =>
       this.state.selectedMessageIds.includes(message.id)
     );
-    let needLabelsArr = matchingMessages.filter(
-      message => !message.labels.includes(label)
-    );
-    needLabelsArr.forEach(message =>
+    matchingMessages.filter(message => !message.labels.includes(label));
+    matchingMessages.forEach(message =>
       updateMessage(message.id, {
         labels: message.labels + ',' + label
       }).then(() =>
