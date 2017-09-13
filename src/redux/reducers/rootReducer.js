@@ -25,28 +25,27 @@ export default function rootReducer(
         ...currentState,
         messages: newMessages
       };
-    //find message and mark it as starred true
-
-    // this.setState(prevState => {
-
-    //   newMessages.find(
-    //     starredMessage => starredMessage.id === res.id
-    //   ).starred = true;
-    //   return {
-    //     messages: newMessages
-    //   };
-    // });
-    //     let newMessagesStar = currentState.messages.slice(0);
-    // newMessagesStar.find(thisMessage => thisMessage.id === action.messageId).starred = true
-    //   return {
-    //     ...currentState,
-    //     messages: newMessagesStar,
 
     case 'Mark_As_Read':
+      let newMarkAsReadMessages = currentState.messages.slice(0);
+      newMarkAsReadMessages.find(
+        readMessage => readMessage.id === action.messageId
+      ).read = true;
       return {
         ...currentState,
-        messages: currentState.messages
+        messages: newMarkAsReadMessages
       };
+
+    // this.setState(prevState => {
+    //   let newMessages = prevState.messages.slice(0);
+    //   newMessages.find(
+    //     readMessage => readMessage.id === messageId
+    //   ).read = true;
+    //   return {
+    //     messages: newMessages,
+    //     selectedMessageIds: []
+    //   };
+    // })
 
     case 'Mark_As_Unread':
       return;

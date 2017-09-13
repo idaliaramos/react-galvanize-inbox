@@ -128,16 +128,17 @@ class App extends Component {
   onMarkAsReadMessage = messageId => {
     console.log('int the mark appjs read message', messageId);
     updateMessage(messageId, { read: true }).then(() => {
-      this.setState(prevState => {
-        let newMessages = prevState.messages.slice(0);
-        newMessages.find(
-          readMessage => readMessage.id === messageId
-        ).read = true;
-        return {
-          messages: newMessages,
-          selectedMessageIds: []
-        };
-      });
+      this.props.store.dispatch({ type: 'Mark_As_Read', messageId });
+      // this.setState(prevState => {
+      //   let newMessages = prevState.messages.slice(0);
+      //   newMessages.find(
+      //     readMessage => readMessage.id === messageId
+      //   ).read = true;
+      //   return {
+      //     messages: newMessages,
+      //     selectedMessageIds: []
+      //   };
+      // });
     });
   };
 
