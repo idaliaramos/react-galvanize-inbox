@@ -10,9 +10,7 @@ export default function ComposeFormComponent({ onCancel, onSubmit }) {
     event.preventDefault();
     let $subject = document.getElementById('subject').value;
     let $body = document.getElementById('body').value;
-
     let message = { subject: $subject, body: $body };
-
     onSubmit(message);
   }
   return (

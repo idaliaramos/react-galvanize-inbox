@@ -58,26 +58,24 @@ class App extends Component {
   }
 
   onSubmit = message => {
-    let newMessage = {
-      fields: {
-        subject: message.subject,
-        body: message.body,
-        read: false,
-        starred: false,
-        labels: 'new'
-      }
-    };
+    createMessage(message).then(newMessage =>
+      this.props.store.dispatch({
+        type: 'Add_New_Message',
+        subject: newMessage.subject,
+        body: newMessage.body
+      })
+    );
 
-    createMessage(message).then(newMessage => {
-      this.setState(prevState => {
-        let newMessages = prevState.messages.slice(0);
-        newMessages.unshift(message);
-        return {
-          messages: newMessages,
-          showComposeForm: false
-        };
-      });
-    });
+    // createMessage(message).then(newMessage => {
+    //   this.setState(prevState => {
+    //     let newMessages = prevState.messages.slice(0);
+    //     newMessages.unshift(message);
+    //     return {
+    //       messages: newMessages,
+    //       showComposeForm: false
+    //     };
+    //   });
+    // });
   };
 
   onCancel = () => {
@@ -109,21 +107,9 @@ class App extends Component {
 
   onStarMessage = messageId => {
     updateMessage(messageId, { starred: true }).then(res => {
-      this.setState(prevState => {
-        let newMessages = prevState.messages.slice(0);
-        newMessages.find(
-          starredMessage => starredMessage.id === res.id
-        ).starred = true;
-        return {
-          messages: newMessages
-        };
-      });
+      this.props.store.dispatch({ type: 'Mark_As_Starred', messageId });
     });
   };
-
-  // function onUnstarMessage(messageId) {
-  //   messages.filter(message => message.id === messageId)[0].starred = false;
-  // }
 
   onUnstarMessage = messageId => {
     updateMessage(messageId, { starred: false }).then(res => {
@@ -310,12 +296,16 @@ class App extends Component {
   };
 
   componentDidMount() {
-    GetMessages().then(filteredResults => {
-      this.setState(prevState => {
-        return { messages: filteredResults };
-      });
+    GetMessages().then(messages => {
+      this.props.store.dispatch({ type: 'Get_Messages', messages });
     });
   }
+  //   .then(filteredResults => {
+  //     this.setState(prevState => {
+  //       return { messages: filteredResults };
+  //     });
+  //   });
+  // }
 }
 
 export default App;
