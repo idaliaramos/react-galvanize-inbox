@@ -15,15 +15,15 @@ export default function MessagesComponent({
   onMarkAsUnreadSelectedMessages,
   onDeleteSelectedMessages
 }) {
-  // 
-  // 
+  //
+  //
   return (
     <div className="MessagesComponent">
       {messages.map(message =>
         <MessageComponent
+          // key={message.id}
           message={message}
           selected={selectedMessageIds.includes(message.id)}
-          key={message.id}
           selectedMessageIds={selectedMessageIds}
           onMarkAsReadMessage={onMarkAsReadMessage}
           onSelectMessage={onSelectMessage}

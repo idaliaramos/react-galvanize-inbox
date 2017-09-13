@@ -70,7 +70,7 @@ export default class MessageComponent extends React.Component {
       message: true,
       unread: !message.read,
       read: message.read,
-      selected: message.selected
+      selected: this.props.selected
     });
 
     return (
