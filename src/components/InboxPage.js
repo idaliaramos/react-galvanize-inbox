@@ -42,7 +42,7 @@ export default function InboxPage({
           showComposeForm={showComposeForm}
         />
         <MessagesComponent
-          key="messagecomponent"
+          key={'messagecomponent1'}
           messages={messages}
           onSelectMessage={onSelectMessage}
           onMarkAsReadMessage={onMarkAsReadMessage}

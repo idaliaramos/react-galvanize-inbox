@@ -46,9 +46,9 @@ export default class MessageComponent extends React.Component {
 
   renderLabels = labels => {
     //
-    return labels.map(label => {
+    return labels.map((label, i) => {
       return (
-        <span className="label label-warning">
+        <span key={i} className="label label-warning">
           {label}
         </span>
       );

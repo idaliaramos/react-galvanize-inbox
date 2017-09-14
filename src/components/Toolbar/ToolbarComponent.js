@@ -102,11 +102,17 @@ export default function ToolbarComponent({
           <i className={isSelectedClassNames} onClick={handleSelectallClick} />
         </button>
 
-        <button className="btn btn-default" onClick={handleMarkSelectedAsRead}>
+        <button
+          className="btn btn-default"
+          disabled={disable()}
+          onClick={handleMarkSelectedAsRead}>
           Mark As Read
         </button>
 
-        <button className="btn btn-default" onClick={handleMarkAsUnread}>
+        <button
+          className="btn btn-default"
+          disabled={disable()}
+          onClick={handleMarkAsUnread}>
           Mark As Unread
         </button>
 
@@ -114,7 +120,7 @@ export default function ToolbarComponent({
           className="form-control label-select"
           disabled={disable()}
           onChange={handleLabelClick}>
-          <option>Apply label</option>
+          <option value="">Apply label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>
@@ -124,7 +130,7 @@ export default function ToolbarComponent({
           className="form-control label-select"
           disabled={disable()}
           onChange={handleRemoveLabel}>
-          <option>Remove label</option>
+          <option value="">Remove label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>

@@ -26,50 +26,92 @@ export default function rootReducer(
         messages: newMessages
       };
 
-    case 'Mark_As_Read':
-      let newMarkAsReadMessages = currentState.messages.slice(0);
-      newMarkAsReadMessages.find(
-        readMessage => readMessage.id === action.messageId
-      ).read = true;
+    case 'Mark_As_Unstarred':
+      let newUnstarredMessages = currentState.messages.slice(0);
+      newUnstarredMessages.find(
+        starredMessage => starredMessage.id === action.messageId
+      ).starred = false;
       return {
         ...currentState,
-        messages: newMarkAsReadMessages
+        messages: newUnstarredMessages
+      };
+
+    case 'Mark_As_Read':
+      return {
+        ...currentState,
+        messages: currentState.messages.map(
+          message =>
+            message.id === action.messageId
+              ? { ...message, read: true }
+              : message
+        )
       };
 
     case 'Mark_As_Unread':
-      let newSetofMessages = currentState.messages.splice(0);
-      newSetofMessages.filter(message =>
-        currentState.selectedMessageIds.includes(message.id)
-      );
-      newSetofMessages.forEach(message => (message.read = false));
       return {
         ...currentState,
-        messages: newSetofMessages
+        messages: currentState.messages.map(
+          message =>
+            message.id === action.messageId
+              ? { ...message, read: false }
+              : message
+        )
       };
 
-    case 'Add-Label':
-      return;
+    case 'Add_Label':
+      let newLabelMessages = currentState.messages;
+      newLabelMessages
+        .find(message => message.id === action.id)
+        .labels.push(action.label);
+      return {
+        ...currentState,
+        messages: newLabelMessages
+      };
 
     case 'Remove_Label':
-      return;
+      return {
+        ...currentState,
+        messages: currentState.messages.map(
+          message =>
+            message.id === action.messageId
+              ? {
+                  ...message,
+                  labels: message.labels.filter(
+                    label => label !== action.labelToRemove
+                  )
+                }
+              : message
+        )
+      };
 
     case 'Add_New_Message':
       return {
         ...currentState,
         messages: [
-          { subject: action.subject, body: action.body },
+          { subject: action.subject, body: action.body, id: action.id },
           ...currentState.messages
         ]
       };
 
     case 'Remove_Message':
-      let newMessagestoRemove = currentState.messages.splice(0);
-      let nMR = newMessagestoRemove.filter(
-        message => !currentState.selectedMessageIds.includes(action.messageId)
-      );
+      // let newMessagestoRemove = currentState.messages.slice(0);
+      // let nMR = newMessagestoRemove.filter(
+      //   message => !currentState.selectedMessageIds.includes(action.messageId)
+      // );
+      // console.log(action, 'action is');
+      // console.log(action.messageId, 'actionMessageId');
+      // console.log(action.selectedMessageIds, 'Ids');
+      // console.log(nMR, 'messages');
+      // console.log(newMessagestoRemove, 'newMessagestoRemove');
+      // let toDelete = currentState.messages.filter(
+      //   message => message.id !== action.id
+      // );
+
       return {
         ...currentState,
-        messages: nMR
+        messages: currentState.messages.filter(
+          message => message.id !== action.messageId
+        )
       };
 
     //
@@ -84,6 +126,23 @@ export default function rootReducer(
     //     };
     //   })
     // )
+    case 'Close_Compose_Form':
+      let closeComposeForm = currentState.newComposeForm;
+      closeComposeForm = false;
+
+      return {
+        ...currentState,
+        showComposeForm: closeComposeForm
+      };
+
+    case 'Open_Compose_Form':
+      let openComposeForm = currentState.newComposeForm;
+      openComposeForm = true;
+
+      return {
+        ...currentState,
+        showComposeForm: openComposeForm
+      };
 
     default:
       return currentState;

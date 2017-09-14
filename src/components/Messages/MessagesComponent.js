@@ -21,7 +21,7 @@ export default function MessagesComponent({
     <div className="MessagesComponent">
       {messages.map(message =>
         <MessageComponent
-          // key={message.id}
+          key={message.id}
           message={message}
           selected={selectedMessageIds.includes(message.id)}
           selectedMessageIds={selectedMessageIds}

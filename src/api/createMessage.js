@@ -11,6 +11,7 @@ export default function createMessage(message) {
   })
     .then(response => response.json())
     .then(record => {
+      console.log(record, 'RECORD');
       return {
         id: record.id,
         body: record.fields.body ? record.fields.body : 'there is no message',
