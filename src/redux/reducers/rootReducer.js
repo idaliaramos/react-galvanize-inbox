@@ -9,52 +9,29 @@ export default function rootReducer(
   action
 ) {
   switch (action.type) {
-    case 'Get_Messages':
+    case 'GET_MESSAGES_COMPLETED':
       return {
         messages: action.messages,
         selectedMessageIds: [],
         showComposeForm: false
       };
 
-    case 'Mark_As_Starred':
-      let newMessages = currentState.messages.slice(0);
-      newMessages.find(
-        starredMessage => starredMessage.id === action.messageId
-      ).starred = true;
-      return {
-        ...currentState,
-        messages: newMessages
-      };
+    // case 'Mark_As_Starred':
+    //   let newMessages = currentState.messages.slice(0);
+    //   newMessages.find(
+    //     starredMessage => starredMessage.id === action.messageId
+    //   ).starred = true;
+    //   return {
+    //     ...currentState,
+    //     messages: newMessages
+    //   };
 
-    case 'Mark_As_Unstarred':
-      let newUnstarredMessages = currentState.messages.slice(0);
-      newUnstarredMessages.find(
-        starredMessage => starredMessage.id === action.messageId
-      ).starred = false;
-      return {
-        ...currentState,
-        messages: newUnstarredMessages
-      };
-
-    case 'Mark_As_Read':
+    case 'UPDATE_MESSAGE_COMPLETED':
       return {
         ...currentState,
         messages: currentState.messages.map(
           message =>
-            message.id === action.messageId
-              ? { ...message, read: true }
-              : message
-        )
-      };
-
-    case 'Mark_As_Unread':
-      return {
-        ...currentState,
-        messages: currentState.messages.map(
-          message =>
-            message.id === action.messageId
-              ? { ...message, read: false }
-              : message
+            message.id === action.message.id ? action.message : message
         )
       };
 
@@ -84,7 +61,7 @@ export default function rootReducer(
         )
       };
 
-    case 'Add_New_Message':
+    case 'ADD_NEW_MESSAGE':
       return {
         ...currentState,
         messages: [
@@ -93,25 +70,40 @@ export default function rootReducer(
         ]
       };
 
-    case 'Remove_Message':
-      // let newMessagestoRemove = currentState.messages.slice(0);
-      // let nMR = newMessagestoRemove.filter(
-      //   message => !currentState.selectedMessageIds.includes(action.messageId)
-      // );
-      // console.log(action, 'action is');
-      // console.log(action.messageId, 'actionMessageId');
-      // console.log(action.selectedMessageIds, 'Ids');
-      // console.log(nMR, 'messages');
-      // console.log(newMessagestoRemove, 'newMessagestoRemove');
-      // let toDelete = currentState.messages.filter(
-      //   message => message.id !== action.id
-      // );
+    case 'CREATE_MESSAGE_COMPLETED':
+      return {
+        ...currentState,
+        messages: [action.message, ...currentState.messages]
+      };
+    // case 'ADD_NEW_MESSAGE_COMPLETED':
+    //   return {
+    //     ...currentState,
+    //     messages: [
+    //       { subject: action.subject, body: action.body, id: action.id },
+    //       ...currentState.messages
+    //     ],
+    //     selectedMessageId: action.message.id,
+    //     isCreatingMessage: false
+    //   };
+    // case 'CREATE_MESSAGE_FAILED':
+    //   return {
+    //     ...currentState,
+    //     isCreatingMessage: false,
+    //     didCreatingMessageFail: true
+    //   };
 
+    case 'DELETE_MESSAGE':
       return {
         ...currentState,
         messages: currentState.messages.filter(
           message => message.id !== action.messageId
         )
+      };
+    case 'DELETE_MESSAGE_FAILED':
+      return {
+        ...currentState,
+        isDeletingMessage: false,
+        didDeletingMessageFail: true
       };
 
     //

@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import InboxPage from './components/InboxPage';
-import GetMessages from './api/GetMessages';
-// import postStarred from './api/postStarred';
-import deleteMessage from './api/deleteMessage';
+// import GetMessages from './api/GetMessages';
+// import deleteMessage from './api/deleteMessage';
 import updateMessage from './api/updateMessage';
-import createMessage from './api/createMessage';
+// import createMessage from './api/createMessage';
+import createMessageThunk from './redux/thunks/createMessageThunk';
+import updateMessageThunk from './redux/thunks/updateMessageThunk';
+import deleteMessageThunk from './redux/thunks/deleteMessageThunk';
+import getMessagesThunk from './redux/thunks/getMessagesThunk';
+
 // import './App.css';
 
 class App extends Component {
@@ -58,27 +62,7 @@ class App extends Component {
   }
 
   onSubmit = message => {
-    createMessage(message).then(
-      newMessage =>
-        this.props.store.dispatch({
-          type: 'Add_New_Message',
-          id: newMessage.id,
-          subject: newMessage.subject,
-          body: newMessage.body
-        }),
-      this.props.store.dispatch({ type: 'Close_Compose_Form' })
-    );
-
-    // createMessage(message).then(newMessage => {
-    //   this.setState(prevState => {
-    //     let newMessages = prevState.messages.slice(0);
-    //     newMessages.unshift(message);
-    //     return {
-    //       messages: newMessages,
-    //       showComposeForm: false
-    //     };
-    //   });
-    // });
+    this.props.store.dispatch(createMessageThunk(message));
   };
 
   onSelectMessage = messageId => {
@@ -105,21 +89,20 @@ class App extends Component {
   };
 
   onStarMessage = messageId => {
-    updateMessage(messageId, { starred: true }).then(res => {
-      this.props.store.dispatch({ type: 'Mark_As_Starred', messageId });
-    });
+    // updateMessage(messageId, { starred: true }).then(res => {
+    //   this.props.store.dispatch({ type: 'Mark_As_Starred', messageId });
+    // });
+    this.props.store.dispatch(updateMessageThunk(messageId, { starred: true }));
   };
 
   onUnstarMessage = messageId => {
-    updateMessage(messageId, { starred: false }).then(res => {
-      this.props.store.dispatch({ type: 'Mark_As_Unstarred', messageId });
-    });
+    this.props.store.dispatch(
+      updateMessageThunk(messageId, { starred: false })
+    );
   };
 
   onMarkAsReadMessage = messageId => {
-    updateMessage(messageId, { read: true }).then(() => {
-      this.props.store.dispatch({ type: 'Mark_As_Read', messageId });
-    });
+    this.props.store.dispatch(updateMessageThunk(messageId, { read: true }));
   };
 
   onMarkAsUnreadSelectedMessages = () => {
@@ -147,12 +130,10 @@ class App extends Component {
   };
 
   onDeleteSelectedMessages = () => {
-    this.state.selectedMessageIds.forEach(messageId =>
-      deleteMessage(messageId).then(
-        () => this.props.store.dispatch({ type: 'Remove_Message', messageId })
-        // .then(this.props.store.dispatch({ type: 'Get_Messages', messageId }))
-      )
-    );
+    this.state.selectedMessageIds.forEach(messageId => {
+      console.log(this.state.selectedMessageIds);
+      this.props.store.dispatch(deleteMessageThunk(messageId, { read: true }));
+    });
   };
 
   onDeselectAllMessages = () => {
@@ -217,9 +198,10 @@ class App extends Component {
   };
 
   componentDidMount() {
-    GetMessages().then(messages => {
-      this.props.store.dispatch({ type: 'Get_Messages', messages });
-    });
+    // GetMessages().then(messages => {
+    //   this.props.store.dispatch({ type: 'GET_MESSAGES', messages });
+    // });
+    this.props.store.dispatch(getMessagesThunk());
   }
 }
 
