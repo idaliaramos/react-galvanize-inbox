@@ -8,6 +8,7 @@ export default function updateMessageThunk(messageId, change) {
     }).then(updatedMessage => {
       dispatch({ type: 'UPDATE_MESSAGE_COMPLETED', message: updatedMessage });
     });
+
     // .catch(error => {
     //   dispatch({ type: 'CREATE_MESSAGE_FAILED' });
     // });

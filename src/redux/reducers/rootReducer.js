@@ -16,23 +16,14 @@ export default function rootReducer(
         showComposeForm: false
       };
 
-    // case 'Mark_As_Starred':
-    //   let newMessages = currentState.messages.slice(0);
-    //   newMessages.find(
-    //     starredMessage => starredMessage.id === action.messageId
-    //   ).starred = true;
-    //   return {
-    //     ...currentState,
-    //     messages: newMessages
-    //   };
-
     case 'UPDATE_MESSAGE_COMPLETED':
       return {
         ...currentState,
         messages: currentState.messages.map(
           message =>
             message.id === action.message.id ? action.message : message
-        )
+        ),
+        selectedMessageIds: []
       };
 
     case 'Add_Label':
@@ -61,36 +52,11 @@ export default function rootReducer(
         )
       };
 
-    case 'ADD_NEW_MESSAGE':
-      return {
-        ...currentState,
-        messages: [
-          { subject: action.subject, body: action.body, id: action.id },
-          ...currentState.messages
-        ]
-      };
-
     case 'CREATE_MESSAGE_COMPLETED':
       return {
         ...currentState,
         messages: [action.message, ...currentState.messages]
       };
-    // case 'ADD_NEW_MESSAGE_COMPLETED':
-    //   return {
-    //     ...currentState,
-    //     messages: [
-    //       { subject: action.subject, body: action.body, id: action.id },
-    //       ...currentState.messages
-    //     ],
-    //     selectedMessageId: action.message.id,
-    //     isCreatingMessage: false
-    //   };
-    // case 'CREATE_MESSAGE_FAILED':
-    //   return {
-    //     ...currentState,
-    //     isCreatingMessage: false,
-    //     didCreatingMessageFail: true
-    //   };
 
     case 'DELETE_MESSAGE':
       return {
@@ -106,22 +72,9 @@ export default function rootReducer(
         didDeletingMessageFail: true
       };
 
-    //
-    // .then(() =>
-    //   this.setState(prevState => {
-    //     let newMessages = prevState.messages.splice(0);
-    //     let updatedMessages = newMessages.filter(
-    //       message => !prevState.selectedMessageIds.includes(message.id)
-    //     );
-    //     return {
-    //       messages: updatedMessages
-    //     };
-    //   })
-    // )
-    case 'Close_Compose_Form':
-      let closeComposeForm = currentState.newComposeForm;
+    case 'CLOSE_COMPOSE_FORM':
+      let closeComposeForm = currentState.showComposeForm;
       closeComposeForm = false;
-
       return {
         ...currentState,
         showComposeForm: closeComposeForm
@@ -130,12 +83,49 @@ export default function rootReducer(
     case 'Open_Compose_Form':
       let openComposeForm = currentState.newComposeForm;
       openComposeForm = true;
-
       return {
         ...currentState,
         showComposeForm: openComposeForm
       };
+    case 'SELECT_MESSAGE':
+      let newSelectedMessages = currentState.selectedMessageIds.slice(0);
+      newSelectedMessages.push(action.messageId);
+      return {
+        ...currentState,
+        selectedMessageIds: newSelectedMessages,
+        selectedMessageCount: newSelectedMessages.length
+      };
+    case 'DESELECT_MESSAGE':
+      let newSelectedMessageIds = currentState.selectedMessageIds.slice(0);
+      let removeIndex = newSelectedMessageIds.indexOf(action.messageId);
+      newSelectedMessageIds.splice(removeIndex, 1);
+      return {
+        ...currentState,
+        selectedMessageIds: newSelectedMessageIds
+        // selectedMessageCount: newSelectedMessageIds.length
+      };
 
+    //   return {
+    //     selectedMessageIds: newSelectedMessageIds,
+    //     selectedMessageCount: newSelectedMessageIds.length
+    case 'DESELECT_ALL':
+      return {
+        ...currentState,
+        selectedMessageIds: []
+      };
+    case 'SELECT_ALL':
+      // let newSelectedMessageIds = currentState.selectedMessageIds.slice(0);
+      // newSelectedMessageIds = action.messages.map(message => message.id);
+      return {
+        ...currentState,
+        selectedMessageIds: currentState.messages.map(message => message.id)
+
+        // this.setState(prevState => {
+        //   let newSelectedMessageIds = prevState.selectedMessageIds.slice(0);
+        //   newSelectedMessageIds = this.state.messages.map(message => message.id);
+        //   return { selectedMessageIds: newSelectedMessageIds };
+        // });
+      };
     default:
       return currentState;
   }

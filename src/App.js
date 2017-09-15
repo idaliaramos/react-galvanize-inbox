@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import InboxPage from './components/InboxPage';
-// import GetMessages from './api/GetMessages';
-// import deleteMessage from './api/deleteMessage';
-import updateMessage from './api/updateMessage';
-// import createMessage from './api/createMessage';
 import createMessageThunk from './redux/thunks/createMessageThunk';
 import updateMessageThunk from './redux/thunks/updateMessageThunk';
 import deleteMessageThunk from './redux/thunks/deleteMessageThunk';
@@ -15,13 +11,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      messages: [],
-      selected: false,
-      selectedMessageIds: [],
-      showComposeForm: null,
-      unreadMessages: []
-    };
+    this.state = this.props.store.getState();
 
     this.props.store.subscribe(() => {
       this.setState(this.props.store.getState());
@@ -63,35 +53,18 @@ class App extends Component {
 
   onSubmit = message => {
     this.props.store.dispatch(createMessageThunk(message));
+    this.props.store.dispatch({ type: 'CLOSE_COMPOSE_FORM' });
   };
 
   onSelectMessage = messageId => {
-    this.setState(prevState => {
-      let newSelected = prevState.selectedMessageIds.slice(0);
-      newSelected.push(messageId);
-      return {
-        selectedMessageIds: newSelected,
-        selectedMessageCount: newSelected.length
-      };
-    });
+    this.props.store.dispatch({ type: 'SELECT_MESSAGE', messageId });
   };
 
   onDeselectMessage = messageId => {
-    this.setState(prevState => {
-      let newSelectedMessageIds = prevState.selectedMessageIds.slice(0);
-      let removeIndex = newSelectedMessageIds.indexOf(messageId);
-      newSelectedMessageIds.splice(removeIndex, 1);
-      return {
-        selectedMessageIds: newSelectedMessageIds,
-        selectedMessageCount: newSelectedMessageIds.length
-      };
-    });
+    this.props.store.dispatch({ type: 'DESELECT_MESSAGE' });
   };
 
   onStarMessage = messageId => {
-    // updateMessage(messageId, { starred: true }).then(res => {
-    //   this.props.store.dispatch({ type: 'Mark_As_Starred', messageId });
-    // });
     this.props.store.dispatch(updateMessageThunk(messageId, { starred: true }));
   };
 
@@ -107,26 +80,21 @@ class App extends Component {
 
   onMarkAsUnreadSelectedMessages = () => {
     this.state.selectedMessageIds.forEach(messageId =>
-      updateMessage(messageId, { read: false }).then(() =>
-        this.props.store.dispatch({ type: 'Mark_As_Unread', messageId })
-      )
+      this.props.store.dispatch(updateMessageThunk(messageId, { read: false }))
     );
   };
 
   onMarkAsReadSelectedMessages = () => {
     this.state.selectedMessageIds.forEach(messageId => {
-      updateMessage(messageId, { read: true }).then(() => {
-        this.props.store.dispatch({ type: 'Mark_As_Read', messageId });
-      });
+      this.props.store.dispatch(updateMessageThunk(messageId, { read: true }));
+      // updateMessage(messageId, { read: true }).then(() => {
+      //   this.props.store.dispatch({ type: 'Mark_As_Read', messageId });
+      // });
     });
   };
 
   onSelectAllMessages = () => {
-    this.setState(prevState => {
-      let newSelectedMessageIds = prevState.selectedMessageIds.slice(0);
-      newSelectedMessageIds = this.state.messages.map(message => message.id);
-      return { selectedMessageIds: newSelectedMessageIds };
-    });
+    this.props.store.dispatch({ type: 'SELECT_ALL' });
   };
 
   onDeleteSelectedMessages = () => {
@@ -137,55 +105,46 @@ class App extends Component {
   };
 
   onDeselectAllMessages = () => {
-    this.setState({ selectedMessageIds: [] });
+    this.props.store.dispatch({ type: 'DESELECT_ALL' });
   };
 
   onApplyLabelSelectedMessages = label => {
-    //if it includes the messageId
-    let matchingMessages = this.state.messages.filter(message =>
-      this.state.selectedMessageIds.includes(message.id)
-    );
-    //filter make sure it doesnt have the label
-    matchingMessages.filter(message => !message.labels.includes(label));
-    matchingMessages.forEach(message =>
-      updateMessage(message.id, {
-        labels: message.labels + ',' + label
-      }).then(
-        this.props.store.dispatch({
-          type: 'Add_Label',
-          id: message.id,
-          label: label
+    this.state.selectedMessageIds.forEach(messageId => {
+      const previousMessage = this.state.messages.find(
+        message => messageId === message.id
+      );
+      this.props.store.dispatch(
+        updateMessageThunk(messageId, {
+          labels: previousMessage.labels + ',' + label
         })
-      )
-    );
+      );
+    });
   };
 
   onRemoveLabelSelectedMessages = labelToRemove => {
     this.state.selectedMessageIds.forEach(messageId => {
-      const message = this.state.messages.find(
+      let messagetoUpdate = this.state.messages.find(
         message => message.id === messageId
       );
-      const newLabels = message.labels.filter(label => label !== labelToRemove);
-      updateMessage(messageId, { labels: newLabels.join(',') }).then(() => {
-        this.props.store.dispatch({
-          type: 'Remove_Label',
-          messageId,
-          labelToRemove
-        });
-      });
+      let newLabels = messagetoUpdate.labels.filter(
+        label => label !== labelToRemove
+      );
+      this.props.store.dispatch(
+        updateMessageThunk(messageId, { labels: newLabels.join(',') })
+      );
     });
   };
 
   onOpenComposeForm = () => {
     if (this.state.showComposeForm) {
-      this.props.store.dispatch({ type: 'Close_Compose_Form' });
+      this.props.store.dispatch({ type: 'CLOSE_COMPOSE_FORM' });
     } else {
       this.props.store.dispatch({ type: 'Open_Compose_Form' });
     }
   };
 
   onCancel = () => {
-    this.props.store.dispatch({ type: 'Close_Compose_Form' });
+    this.props.store.dispatch({ type: 'CLOSE_COMPOSE_FORM' });
   };
 
   unreadMessage = () => {
@@ -198,9 +157,6 @@ class App extends Component {
   };
 
   componentDidMount() {
-    // GetMessages().then(messages => {
-    //   this.props.store.dispatch({ type: 'GET_MESSAGES', messages });
-    // });
     this.props.store.dispatch(getMessagesThunk());
   }
 }

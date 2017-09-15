@@ -7,6 +7,7 @@ export default function createMessageThunk(message) {
       token: env.AIRTABLE_TOKEN
     }).then(createdMessage => {
       dispatch({ type: 'CREATE_MESSAGE_COMPLETED', message: createdMessage });
+      dispatch({ type: 'CLOSE_COMPOSE_FORM' });
       return createdMessage;
     });
     // .catch(error => {
