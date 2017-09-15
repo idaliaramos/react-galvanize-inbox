@@ -36,22 +36,6 @@ export default function rootReducer(
         messages: newLabelMessages
       };
 
-    case 'Remove_Label':
-      return {
-        ...currentState,
-        messages: currentState.messages.map(
-          message =>
-            message.id === action.messageId
-              ? {
-                  ...message,
-                  labels: message.labels.filter(
-                    label => label !== action.labelToRemove
-                  )
-                }
-              : message
-        )
-      };
-
     case 'CREATE_MESSAGE_COMPLETED':
       return {
         ...currentState,
@@ -105,9 +89,6 @@ export default function rootReducer(
         // selectedMessageCount: newSelectedMessageIds.length
       };
 
-    //   return {
-    //     selectedMessageIds: newSelectedMessageIds,
-    //     selectedMessageCount: newSelectedMessageIds.length
     case 'DESELECT_ALL':
       return {
         ...currentState,
