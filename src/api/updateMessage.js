@@ -14,6 +14,7 @@ export default function updateMessage(messageId, change) {
   )
     .then(response => response.json())
     .then(record => {
+      console.log(record);
       return {
         id: record.id,
         body: record.fields.body ? record.fields.body : 'there is no message',

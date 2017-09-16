@@ -48,7 +48,8 @@ describe('test the rootReducer', () => {
           read: false
         }
       ],
-      selected: false
+      selected: false,
+      selectedMessageIds: []
     };
 
     let result = rootReducer(initialState, action);
@@ -151,33 +152,13 @@ describe('test the rootReducer', () => {
       messages: null
     };
     let action = {
-      type: 'GET_MESSAGES',
+      type: 'GET_MESSAGES_COMPLETED',
       messages: messages
     };
     let expectedResult = {
-      messages: messages
-      // [
-      //   {
-      //     id: 3,
-      //     body: 'thisbody',
-      //     title: 'thistitle'
-      //   },
-      //   {
-      //     id: 0,
-      //     body: 'body',
-      //     title: 'title'
-      //   },
-      //   {
-      //     id: 1,
-      //     body: 'body',
-      //     title: 'title'
-      //   },
-      //   {
-      //     id: 5,
-      //     body: 'body',
-      //     title: 'title'
-      //   }
-      // ]
+      messages: messages,
+      selectedMessageIds: [],
+      showComposeForm: false
     };
 
     let result = rootReducer(initialState, action);

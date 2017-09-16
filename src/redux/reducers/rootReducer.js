@@ -11,6 +11,7 @@ export default function rootReducer(
   switch (action.type) {
     case 'GET_MESSAGES_COMPLETED':
       return {
+        ...currentState,
         messages: action.messages,
         selectedMessageIds: [],
         showComposeForm: false
@@ -64,7 +65,7 @@ export default function rootReducer(
         showComposeForm: closeComposeForm
       };
 
-    case 'Open_Compose_Form':
+    case 'OPEN_COMPOSE_FORM':
       let openComposeForm = currentState.newComposeForm;
       openComposeForm = true;
       return {

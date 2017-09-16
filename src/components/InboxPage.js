@@ -28,6 +28,7 @@ export default function InboxPage({
     <div className="InboxPage">
       <InboxPageLayout>
         <ToolbarComponent
+          selectedMessageIds={selectedMessageIds}
           messages={messages}
           selectedMessageCount={selectedMessageIds && selectedMessageIds.length}
           onOpenComposeForm={onOpenComposeForm}

@@ -4,6 +4,7 @@ var classNames = require('classnames');
 
 export default function ToolbarComponent({
   messages,
+  selectedMessageIds,
   selectedMessageCount,
   onOpenComposeForm,
   onSelectAllMessages,
@@ -44,29 +45,54 @@ export default function ToolbarComponent({
   function handleMarkAsUnread() {
     console.log('inthe unread');
     // event.preventDefault;
-    onMarkAsUnreadSelectedMessages();
+    selectedMessageIds.forEach(messageId => {
+      onMarkAsUnreadSelectedMessages(messageId);
+    });
   }
   //this is the one when we click and it marks as read
   function handleMarkSelectedAsRead() {
     // event.preventDefault;
     console.log('int the mark as read section');
-    onMarkAsReadSelectedMessages();
+    selectedMessageIds.forEach(messageId => {
+      onMarkAsReadSelectedMessages(messageId);
+    });
   }
 
   function handleDeleteMessages() {
-    onDeleteSelectedMessages();
+    selectedMessageIds.forEach(messageId =>
+      onDeleteSelectedMessages(messageId)
+    );
   }
 
   function handleLabelClick(event) {
     // event.preventDefault();
     let label = event.target.value;
+    let changes = {};
+    selectedMessageIds.forEach(messageId => {
+      const previousMessage = messages.find(
+        message => messageId === message.id
+      );
+      changes.labels = previousMessage.labels;
+      changes.labels.push(label);
+      // let changes = previousMessage.labels + ',' + label;
 
-    onApplyLabelSelectedMessages(label);
+      onApplyLabelSelectedMessages(messageId, {
+        labels: changes.labels.join(',')
+      });
+    });
   }
 
   function handleRemoveLabel(event) {
-    let label = event.target.value;
-    onRemoveLabelSelectedMessages(label);
+    let labelToRemove = event.target.value;
+    // let changes = {};
+    selectedMessageIds.forEach(messageId => {
+      let messagetoUpdate = messages.find(message => message.id === messageId);
+      let newLabels = messagetoUpdate.labels.filter(
+        label => label !== labelToRemove
+      );
+
+      onRemoveLabelSelectedMessages(messageId, { labels: newLabels.join(',') });
+    });
   }
   function handleComposeForm() {
     onOpenComposeForm();
